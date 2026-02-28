@@ -1,12 +1,21 @@
 {
   "rewrites": [
+    { "source": "/.well-known/assetlinks.json", "destination": "/assetlinks.json" },
     { "source": "/", "destination": "/index.html" },
     {
-      "source": "/((?!icon|manifest\\.json|sw\\.js|pwabuilder-sw\\.js|\\.well-known).*)",
+      "source": "/((?!icon|manifest\\.json|sw\\.js|pwabuilder-sw\\.js|assetlinks\\.json).*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
+    {
+      "source": "/assetlinks.json",
+      "headers": [
+        { "key": "Content-Type", "value": "application/json" },
+        { "key": "Cache-Control", "value": "public, max-age=3600" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
     {
       "source": "/.well-known/assetlinks.json",
       "headers": [
@@ -36,12 +45,6 @@
         { "key": "Content-Type", "value": "application/javascript" },
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
         { "key": "Service-Worker-Allowed", "value": "/" }
-      ]
-    },
-    {
-      "source": "/(icon-.*\\.png)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800" }
       ]
     },
     {
