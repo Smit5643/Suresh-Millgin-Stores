@@ -3,6 +3,6 @@
   "target": {
     "namespace": "android_app",
     "package_name": "com.suresh.millgin.stores",
-    "sha256_cert_fingerprints": ["BE:0D:82:1F:72:5C:9F:85:4C:AD:C0:02:15:75:80:B7:5F:D9:CA:6D:A3:50:3B:63:7F:38:AB:8D:71:0C:FA:AE"]
+    "sha256_cert_fingerprints": ["86:29:D4:0D:6C:53:15:05:76:9D:72:F4:C9:E5:0B:F1:48:78:F2:70:8C:C7:F6:9F:56:EE:48:90:B1:48:0B:B2"]
   }
 }]
