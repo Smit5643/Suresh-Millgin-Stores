@@ -1,67 +1,55 @@
-// Suresh Millgin Stores — Service Worker v20260228_070906
-// Strategy: NETWORK FIRST — always get latest version
-// Falls back to cache only when offline
+// Suresh Millgin Stores — SW v20260228_091607
+// Always loads from: https://sureshmillginstores.vercel.app
 
-const CACHE_NAME = 'sms-v20260228_070906';
-const STATIC_ASSETS = [
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
-];
+const CACHE = 'sms-assets-v20260228_091607';
+const APP_URL = 'https://sureshmillginstores.vercel.app';
 
-// Install: pre-cache but don't block
 self.addEventListener('install', e => {
+  self.skipWaiting();
   e.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(STATIC_ASSETS).catch(() => {}))
-      .then(() => self.skipWaiting()) // activate immediately
+    caches.open(CACHE).then(c => c.addAll([
+      APP_URL + '/icon-192.png',
+      APP_URL + '/icon-512.png',
+    ]).catch(() => {}))
   );
 });
 
-// Activate: delete ALL old caches immediately
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
-      ))
-      .then(() => self.clients.claim()) // take control immediately
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch: NETWORK FIRST — always try network, cache only as fallback
 self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
 
-  // Skip non-GET and external API calls entirely
-  if (e.request.method !== 'GET') return;
-  if (url.hostname.includes('supabase') ||
-      url.hostname.includes('emailjs') ||
-      url.hostname.includes('ipify') ||
-      url.hostname.includes('googleapis') ||
-      url.hostname.includes('workbox')) return;
+  // HTML — always fetch fresh from the correct URL, never cached
+  if (e.request.destination === 'document' || url.pathname === '/' || url.pathname.endsWith('.html')) {
+    e.respondWith(
+      fetch(APP_URL + '/', {cache: 'no-store'})
+        .catch(() => fetch(e.request, {cache: 'no-store'}))
+    );
+    return;
+  }
 
-  e.respondWith(
-    // Always try network first — gets latest version
-    fetch(e.request)
-      .then(response => {
-        if (response.ok) {
-          // Update cache with fresh version
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
-        }
-        return response;
+  // Icons — cache for speed
+  if (url.pathname.endsWith('.png') || url.pathname.endsWith('.ico')) {
+    e.respondWith(
+      caches.match(e.request).then(cached => {
+        if (cached) return cached;
+        return fetch(e.request).then(res => {
+          if (res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+          return res;
+        });
       })
-      .catch(() => {
-        // Only use cache when offline
-        return caches.match(e.request)
-          .then(cached => cached || caches.match('/index.html'));
-      })
-  );
+    );
+    return;
+  }
 });
 
-// Listen for skip-waiting message
 self.addEventListener('message', e => {
-  if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
+  if (e.data?.type === 'SKIP_WAITING') self.skipWaiting();
 });
