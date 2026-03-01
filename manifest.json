@@ -1,7 +1,7 @@
 {
   "name": "Suresh Millgin Stores",
   "short_name": "SMS",
-  "description": "Loom Machinery Spare Parts — Digital Product Catalog & Enquiry Platform",
+  "description": "Loom Machinery Spare Parts – Digital Product Catalog & Enquiry Platform",
   "start_url": "https://sureshmillginstores.vercel.app/",
   "scope": "https://sureshmillginstores.vercel.app/",
   "display": "standalone",
@@ -9,7 +9,13 @@
   "background_color": "#0f0f0f",
   "theme_color": "#D4AF37",
   "lang": "en",
-  "prefer_related_applications": false,
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "com.suresh.millgin.store"
+    }
+  ],
   "categories": ["business", "shopping"],
   "icons": [
     {
