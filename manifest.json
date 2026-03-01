@@ -16,7 +16,10 @@
       "id": "com.suresh.millgin.store"
     }
   ],
-  "categories": ["business", "shopping"],
+  "categories": [
+    "business", 
+    "shopping"
+  ],
   "icons": [
     {
       "src": "https://sureshmillginstores.vercel.app/icon-192.png",
