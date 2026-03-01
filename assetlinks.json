@@ -1,8 +1,10 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.suresh.millgin.stores",
-    "sha256_cert_fingerprints": ["86:29:D4:0D:6C:53:15:05:76:9D:72:F4:C9:E5:0B:F1:48:78:F2:70:8C:C7:F6:9F:56:EE:48:90:B1:48:0B:B2"]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "YOUR_PACKAGE_NAME",
+      "sha256_cert_fingerprints": ["YOUR_SHA256_HERE"]
+    }
   }
-}]
+]
