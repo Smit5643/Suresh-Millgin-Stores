@@ -1,7 +1,7 @@
-// Suresh Millgin Stores — SW v20260228_091607
+// Suresh Millgin Stores — SW v20260302_082943
 // Always loads from: https://sureshmillginstores.vercel.app
 
-const CACHE = 'sms-assets-v20260228_091607';
+const CACHE = 'sms-assets-v20260302_082943';
 const APP_URL = 'https://sureshmillginstores.vercel.app';
 
 self.addEventListener('install', e => {
@@ -25,8 +25,9 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
+  if (url.hostname !== location.hostname) return;
 
-  // HTML — always fetch fresh from the correct URL, never cached
+  // HTML — always fresh from Vercel, never cached
   if (e.request.destination === 'document' || url.pathname === '/' || url.pathname.endsWith('.html')) {
     e.respondWith(
       fetch(APP_URL + '/', {cache: 'no-store'})
